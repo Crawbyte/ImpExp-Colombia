@@ -1,0 +1,48 @@
+#First we need to access to our dataset and extract the available files, import the necessary libraries and check if they are updated. 
+library(readr)
+library(dplyr)
+library(plyr)
+
+---
+# Importing Data
+#Now we can import the five available files separated by "|" but in csv format:
+
+
+*   **colombia_exports.csv** [16.7MB] and **colombia_imports.csv** [24.1MB]: with historical data from colombian international market
+*   **country_names.csv** [6.5kB]: with the list of official abbreviation of the countries in the study
+*   **groups_sitc_rev2.csv** [2.8kB]: with the category groups of products from the SITC
+*   **products_sitc_rev2.csv** [39.4kB]: with detailed products and the official ID from the SITC
+
+country_names <- read_delim("country_names.csv", 
+                            "|", escape_double = FALSE, trim_ws = TRUE)
+
+colombia_imports <- read_delim("colombia_imports.csv", 
+                            "|", escape_double = FALSE, trim_ws = TRUE)
+
+colombia_exports <- read_delim("colombia_exports.csv", 
+                            "|", escape_double = FALSE, trim_ws = TRUE)
+
+groups_sitc_rev2 <- read_delim("groups_sitc_rev2.csv", 
+                               "|", escape_double = FALSE, trim_ws = TRUE)
+
+products_sitc_rev2 <- read_delim("products_sitc_rev2.csv", 
+                               "|", escape_double = FALSE, trim_ws = TRUE)
+
+---
+# Cleaning and Transforming Data
+We can take a quick look at the components of each DataFrame using the functions `.head()` to see the first five rows, `.shape()` to see the number of rows and columns that make it up and `.isna()` to check if there are empty cells that can generate an error. 
+
+But, in resume:
+*   **colombia_exports** have 7 variables and 389.596 observations. No Na's
+*   **colombia_imports** have 7 variables and 560.492 observations. No Na's
+*   **country_names** have 4 variables and 263 observations. No Na's
+*   **groups_sitc_rev2** have 3 variables and 65 observations. No Na's
+*   **products_sitc_rev2** have 4 variables and 988 observations. No Na's
+
+#Adding tags and merge
+colombia_imports <- mutate(colombia_imports, category="import")
+colombia_exports <- mutate(colombia_exports, category="export")
+impExp_Colombia <- rbind(colombia_imports, colombia_exports) 
+
+#Cleaning data
+names(impExp_Colombia) <- c("Unnamed: 0", "Year", "Origin", "Destination", "Product", "Value US$", "Category")
