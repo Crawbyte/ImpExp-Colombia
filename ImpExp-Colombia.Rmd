@@ -1,36 +1,63 @@
-#First we need to access to our dataset and extract the available files, import the necessary libraries and check if they are updated. 
+---
+title: "ImpExp-Colombia"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+##Pre-work
+First we need to access to our dataset and extract the available files, import the necessary libraries and check if they are updated. 
+####Install packages
+```{r}
+install.packages("rmarkdown")
+install.packages("readr")
+install.packages("dplyr")
+install.packages("plyr")
+```
+
+####Activating packages
+```{r}
+library(rmarkdown)
 library(readr)
 library(dplyr)
 library(plyr)
-
+```
 ---
-# Importing Data
-#Now we can import the five available files separated by "|" but in csv format:
 
+
+##Importing Data
+This is what we have:
 
 *   **colombia_exports.csv** [16.7MB] and **colombia_imports.csv** [24.1MB]: with historical data from colombian international market
 *   **country_names.csv** [6.5kB]: with the list of official abbreviation of the countries in the study
 *   **groups_sitc_rev2.csv** [2.8kB]: with the category groups of products from the SITC
 *   **products_sitc_rev2.csv** [39.4kB]: with detailed products and the official ID from the SITC
 
-country_names <- read_delim("country_names.csv", 
+Now we can import the five available files separated by "|" but in csv format:
+```{r}
+country_names <- read_delim("/data/country_names.csv", 
                             "|", escape_double = FALSE, trim_ws = TRUE)
 
-colombia_imports <- read_delim("colombia_imports.csv", 
+colombia_imports <- read_delim("/data/colombia_imports.csv", 
                             "|", escape_double = FALSE, trim_ws = TRUE)
 
-colombia_exports <- read_delim("colombia_exports.csv", 
+colombia_exports <- read_delim("/data/colombia_exports.csv", 
                             "|", escape_double = FALSE, trim_ws = TRUE)
 
-groups_sitc_rev2 <- read_delim("groups_sitc_rev2.csv", 
+groups_sitc_rev2 <- read_delim("/data/groups_sitc_rev2.csv", 
                                "|", escape_double = FALSE, trim_ws = TRUE)
 
-products_sitc_rev2 <- read_delim("products_sitc_rev2.csv", 
+products_sitc_rev2 <- read_delim("/data/products_sitc_rev2.csv", 
                                "|", escape_double = FALSE, trim_ws = TRUE)
-
+```
 ---
-# Cleaning and Transforming Data
-We can take a quick look at the components of each DataFrame using the functions `.head()` to see the first five rows, `.shape()` to see the number of rows and columns that make it up and `.isna()` to check if there are empty cells that can generate an error. 
+
+
+##Cleaning and Transforming Data
+We can take a quick look at the components of each DataFrame using the functions `head()` to see the first five rows, `str()` to see the number of rows and columns that make it up and `sum(is.nan())` to check if there are empty cells that can generate an error. 
 
 But, in resume:
 *   **colombia_exports** have 7 variables and 389.596 observations. No Na's
@@ -39,10 +66,16 @@ But, in resume:
 *   **groups_sitc_rev2** have 3 variables and 65 observations. No Na's
 *   **products_sitc_rev2** have 4 variables and 988 observations. No Na's
 
-#Adding tags and merge
+
+####Adding tags and merge in one table
+```{r}
 colombia_imports <- mutate(colombia_imports, category="import")
 colombia_exports <- mutate(colombia_exports, category="export")
 impExp_Colombia <- rbind(colombia_imports, colombia_exports) 
+```
 
-#Cleaning data
+
+####Renaming columns
+```{r}
 names(impExp_Colombia) <- c("Unnamed: 0", "Year", "Origin", "Destination", "Product", "Value US$", "Category")
+```
