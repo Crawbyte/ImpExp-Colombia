@@ -38,20 +38,25 @@ This is what we have:
 
 Now we can import the five available files separated by "|" but in csv format:
 ```{r}
-country_names <- read_delim("/data/country_names.csv", 
-                            "|", escape_double = FALSE, trim_ws = TRUE)
+country_names <- read_delim("data/country_names.csv", 
+                            "|", escape_double = FALSE, na = "NA", 
+                            trim_ws = TRUE)
 
-colombia_imports <- read_delim("/data/colombia_imports.csv", 
-                            "|", escape_double = FALSE, trim_ws = TRUE)
+colombia_imports <- read_delim("data/colombia_imports.csv", 
+                               "|", escape_double = FALSE, na = "NA", 
+                               trim_ws = TRUE)
 
-colombia_exports <- read_delim("/data/colombia_exports.csv", 
-                            "|", escape_double = FALSE, trim_ws = TRUE)
+colombia_exports <- read_delim("data/colombia_exports.csv", 
+                               "|", escape_double = FALSE, na = "NA", 
+                               trim_ws = TRUE)
 
-groups_sitc_rev2 <- read_delim("/data/groups_sitc_rev2.csv", 
-                               "|", escape_double = FALSE, trim_ws = TRUE)
+groups_sitc_rev2 <- read_delim("data/groups_sitc_rev2.csv", 
+                               "|", escape_double = FALSE, na = "NA", 
+                               trim_ws = TRUE)
 
-products_sitc_rev2 <- read_delim("/data/products_sitc_rev2.csv", 
-                               "|", escape_double = FALSE, trim_ws = TRUE)
+products_sitc_rev2 <- read_delim("data/products_sitc_rev2.csv", 
+                                 "|", escape_double = FALSE, na = "NA", 
+                                 trim_ws = TRUE)
 ```
 ---
 
@@ -77,5 +82,5 @@ impExp_Colombia <- rbind(colombia_imports, colombia_exports)
 
 ####Renaming columns
 ```{r}
-names(impExp_Colombia) <- c("Unnamed: 0", "Year", "Origin", "Destination", "Product", "Value US$", "Category")
+names(impExp_Colombia) <- c("Index", "Unnamed: 0", "Year", "Origin", "Destination", "Product", "Value US$", "Category")
 ```
